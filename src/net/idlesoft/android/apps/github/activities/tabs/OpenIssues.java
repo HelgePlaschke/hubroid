@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class OpenIssues extends Activity {
     private static class OpenIssuesTask extends AsyncTask<Void, Void, Void> {
@@ -88,6 +89,12 @@ public class OpenIssues extends Activity {
         }
     };
 
+    private final OnItemLongClickListener mOnListItemLongClick = new OnItemLongClickListener() {
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            return false;
+        }
+    };
+
     private String mPassword;
 
     private String mRepositoryName;
@@ -122,6 +129,7 @@ public class OpenIssues extends Activity {
 
         mListView = (ListView) getLayoutInflater().inflate(R.layout.tab_listview, null);
         mListView.setOnItemClickListener(mOnListItemClick);
+        mListView.setOnItemLongClickListener(mOnListItemLongClick);
 
         setContentView(mListView);
 
