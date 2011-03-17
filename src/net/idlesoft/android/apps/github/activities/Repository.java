@@ -46,14 +46,16 @@ public class Repository extends Activity {
                 if (resp.statusCode == 200) {
                     activity.mJson = new JSONObject(resp.resp).getJSONObject("repository");
 
-                    final JSONArray watched_list = new JSONObject(activity.mGapi.user
-                            .watching(activity.mUsername).resp).getJSONArray("repositories");
-                    final int length = watched_list.length() - 1;
-                    for (int i = 0; i <= length; i++) {
-                        if (watched_list.getJSONObject(i).getString("name").equalsIgnoreCase(
-                                activity.mRepositoryName)) {
-                            activity.mIsWatching = true;
-                        }
+                    if (!activity.mUsername.equals("") && !activity.mPassword.equals("")) {
+	                    final JSONArray watched_list = new JSONObject(activity.mGapi.user
+	                            .watching(activity.mUsername).resp).getJSONArray("repositories");
+	                    final int length = watched_list.length() - 1;
+	                    for (int i = 0; i <= length; i++) {
+	                        if (watched_list.getJSONObject(i).getString("name").equalsIgnoreCase(
+	                                activity.mRepositoryName)) {
+	                            activity.mIsWatching = true;
+	                        }
+	                    }
                     }
                 }
             } catch (final JSONException e) {
@@ -269,10 +271,12 @@ public class Repository extends Activity {
         if (menu.hasVisibleItems()) {
             menu.clear();
         }
-        if (mIsWatching) {
-            menu.add(0, 3, 0, "Unwatch");
-        } else {
-            menu.add(0, 3, 0, "Watch");
+        if (!mUsername.equals("") && !mPassword.equals("")) {
+	        if (mIsWatching) {
+	            menu.add(0, 3, 0, "Unwatch");
+	        } else {
+	            menu.add(0, 3, 0, "Watch");
+	        }
         }
         menu.add(0, 0, 0, "Back to Main").setIcon(android.R.drawable.ic_menu_revert);
         menu.add(0, 1, 0, "Logout");

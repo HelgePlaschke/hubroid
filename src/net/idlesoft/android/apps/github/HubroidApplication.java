@@ -8,11 +8,15 @@
 
 package net.idlesoft.android.apps.github;
 
+import org.idlesoft.libraries.ghapi.GitHubAPI;
+
 import net.idlesoft.android.apps.github.activities.Dashboard;
+import net.idlesoft.android.apps.github.activities.Hubroid;
 import net.idlesoft.android.apps.github.activities.Search;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +25,48 @@ import android.widget.TextView;
 
 public class HubroidApplication extends Application {
     private static final boolean DEVELOPER_MODE = true;
+
+    private static boolean IS_LOGGED_IN;
+
+    private static String USERNAME;
+
+    private static String PASSWORD;
+
+    private static final GitHubAPI GITHUB_API = new GitHubAPI();
+
+    public static boolean isLoggedIn() {
+    	return IS_LOGGED_IN;
+    }
+
+    public boolean checkIfLoggedIn() {
+    	final SharedPreferences prefs = getSharedPreferences(Hubroid.PREFS_NAME, 0);
+    	if (prefs.getString("username", "").equals("")
+    			|| prefs.getString("password", "").equals("")) {
+    		IS_LOGGED_IN = false;
+    		GITHUB_API.goStealth();
+    	} else {
+    		/* If previously not logged in, set logged in username and password */
+    		if (IS_LOGGED_IN == false) {
+    			USERNAME = prefs.getString("username", "");
+    			PASSWORD = prefs.getString("password", "");
+    			GITHUB_API.authenticate(USERNAME, PASSWORD);
+    		}
+    		IS_LOGGED_IN = true;
+    	}
+    	return IS_LOGGED_IN;
+    }
+
+    public static String getUsername() {
+    	return USERNAME;
+    }
+
+    public static String getPassword() {
+    	return PASSWORD;
+    }
+
+    public static GitHubAPI getGitHubAPI() {
+    	return GITHUB_API;
+    }
 
     @Override
     public void onCreate() {

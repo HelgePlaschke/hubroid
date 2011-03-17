@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -124,13 +125,23 @@ public class Dashboard extends Activity {
 
     public GetLatestBlogPostTask mGetLatestBlogPostTask;
     private Editor mEditor;
+	private SharedPreferences mPrefs;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
 
-        mEditor = getSharedPreferences(Hubroid.PREFS_NAME, 0).edit();
+        mPrefs = getSharedPreferences(Hubroid.PREFS_NAME, 0);
+
+        /* Redirect to login page if user isn't logged in */
+        if (mPrefs.getString("username", "").equals("")
+        		|| mPrefs.getString("password", "").equals("")) {
+        	startActivity(new Intent(Dashboard.this, Login.class));
+        	finish();
+        }
+
+        mEditor = mPrefs.edit();
 
         HubroidApplication.setupActionBar(Dashboard.this, "Hubroid", true, false);
 

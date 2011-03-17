@@ -65,9 +65,11 @@ public class Profile extends Activity {
 	    		Response r = activity.mGapi.user.info(activity.mTarget);
 	    		if (r.statusCode == 200) {
 	    			activity.mJson = new JSONObject(r.resp);
-	    			Response fResp = activity.mGapi.user.following(activity.mUsername);
-	    			if (fResp.statusCode == 200) {
-	    				activity.mJsonFollowing = new JSONObject(fResp.resp).getJSONArray("users");
+	    			if (!activity.mUsername.equals("") && !activity.mPassword.equals("")) {
+		    			Response fResp = activity.mGapi.user.following(activity.mUsername);
+		    			if (fResp.statusCode == 200) {
+		    				activity.mJsonFollowing = new JSONObject(fResp.resp).getJSONArray("users");
+		    			}
 	    			}
 	    			activity.mGravatar = GravatarCache.getDipGravatar(GravatarCache.
 	    					getGravatarID(activity.mTarget), 50.0f,
@@ -130,10 +132,12 @@ public class Profile extends Activity {
             } else {
                 mJson = mJson.getJSONObject("user");
 
-                final int length = mJsonFollowing.length() - 1;
-                for (int i = 0; i <= length; i++) {
-                    if (mJsonFollowing.getString(i).equalsIgnoreCase(mTarget)) {
-                    }
+                if (!mUsername.equals("") && !mPassword.equals("")) {
+	                final int length = mJsonFollowing.length() - 1;
+	                for (int i = 0; i <= length; i++) {
+	                    if (mJsonFollowing.getString(i).equalsIgnoreCase(mTarget)) {
+	                    }
+	                }
                 }
 
                 String company, location, full_name, email, blog;
@@ -214,7 +218,13 @@ public class Profile extends Activity {
         }
 
         if (mTarget == null) {
-        	mTarget = mUsername;
+        	/* Redirect to login if user isn't logged in, or else set logged in user as target */
+        	if (mUsername.equals("") || mPassword.equals("")) {
+        		startActivity(new Intent(Profile.this, Login.class));
+        		finish();
+        	} else {
+        		mTarget = mUsername;
+        	}
         }
 
         mTask = (LoadProfileTask) getLastNonConfigurationInstance();
