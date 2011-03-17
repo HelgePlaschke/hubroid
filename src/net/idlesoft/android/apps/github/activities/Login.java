@@ -105,6 +105,11 @@ public class Login extends Activity {
                 mLoginTask.execute();
             }
         });
+        ((Button) findViewById(R.id.btn_login_explore)).setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				startActivity(new Intent(Login.this, Search.class));
+			}
+		});
     }
 
     @Override

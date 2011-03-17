@@ -81,13 +81,31 @@
 			android:singleLine="true"
 			android:inputType="textPassword"
 			android:background="@android:drawable/editbox_background" />
-		<Button
-			android:layout_marginLeft="20dip"
-		    android:layout_toRightOf="@id/tv_login_username_label"
-		    android:layout_centerVertical="true"
-			android:layout_width="125dip"
-			android:layout_height="wrap_content"
-			android:id="@+id/btn_login_login"
-			android:text="Login" />
+		<LinearLayout
+		  android:orientation="vertical"
+		  android:layout_marginLeft="20dip"
+		  android:layout_toRightOf="@id/tv_login_username_label"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:layout_centerVertical="true"
+		  android:gravity="center">
+			<Button
+				android:layout_width="125dip"
+				android:layout_height="wrap_content"
+				android:id="@+id/btn_login_login"
+				android:text="Login" />
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginBottom="5dip"
+			    android:textStyle="bold"
+			    android:textColor="#ddd"
+			    android:text="or" />
+			<Button
+			  android:layout_width="125dip"
+			  android:layout_height="wrap_content"
+			  android:id="@+id/btn_login_explore"
+			  android:text="Explore" />
+	   </LinearLayout>
 	</RelativeLayout>
 </RelativeLayout>
